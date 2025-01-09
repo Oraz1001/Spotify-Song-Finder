@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Spotify Song Finder</title>
+  <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+  <div class="container">
+    <h1>Spotify Song Finder</h1>
+    <form id="searchForm" method="POST" action="/search">
+      <input type="text" name="query" placeholder="Enter song or artist name" required />
+      <button type="submit">Search</button>
+    </form>
+    <div id="results"></div>
+  </div>
+
+  <script>
+    const form = document.getElementById('searchForm');
+    const resultsContainer = document.getElementById('results');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const formData = new FormData(form);
+      const query = formData.get('query');
+      resultsContainer.innerHTML = '<p>Loading...</p>';
+
+      const response = await fetch('/search', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ query }),
+      });
+      const results = await response.json();
+
+      if (results && results.length > 0) {
+        resultsContainer.innerHTML = results.map((track) => `
+          <div class="track">
+            <img src="${track.image}" alt="Album Art" />
+            <p><strong>${track.name}</strong></p>
+            <p>Artist: ${track.artists}</p>
+            <p>Album: ${track.album}</p>
+            <p>Release Date: ${track.releaseDate}</p>
+            <a href="${track.url}" target="_blank">Listen on Spotify</a>
+          </div>
+        `).join('');
+      } else {
+        resultsContainer.innerHTML = '<p>No results found.</p>';
+      }
+    });
+  </script>
+</body>
+</html>
