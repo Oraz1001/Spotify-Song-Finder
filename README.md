@@ -27,8 +27,8 @@ Follow the steps below to set up and run the application:
 
 1. **Clone the Repository**
    ```bash
-   git clone <repository-url>
-   cd <repository-folder>
+   git clone <https://github.com/Oraz1001/Spotify-Song-Finder.git>
+   cd <your-cloned-repository-folder>
    ```
 
 2. **Set Up Environment Variables**
